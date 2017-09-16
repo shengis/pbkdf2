@@ -60,6 +60,14 @@ func (p *Params) Parse() error {
 		}
 	}
 
+	if p.content == "" {
+		return errors.New("Parameter 'content' is not set")
+	}
+
+	if p.salt == "" {
+		return errors.New("Parameter 'salt' is not set")
+	}
+
 	return nil
 }
 
@@ -69,11 +77,17 @@ func Encrypt(content string, salt string, iter int, keylen int) {
 
 func main() {
 	var params Params
-	err := params.Parse()
 
-	if err != nil {
+	if err := params.Parse(); err != nil {
 		fmt.Println(err)
-		fmt.Println("USAGE " + os.Args[0] + " [-i iter] [-n keylen] content salt")
+		fmt.Println("")
+		fmt.Println("Usage:")
+		fmt.Println(" " + os.Args[0] + " [Options] content salt")
+		fmt.Println("")
+		fmt.Println("Options:")
+		fmt.Println(" -i <iterations>  Number of iterations")
+		fmt.Println(" -n <keylen>      Result key length")
+		fmt.Println("")
 		os.Exit(1)
 	}
 
